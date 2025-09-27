@@ -1,0 +1,59 @@
+{
+  "name": "@kq/captcha",
+  "version": "0.0.1",
+  "description": "A simple captcha generator",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
+  "scripts": {
+    "dev": "tsup",
+    "build": "tsup",
+    "build:docs": "typedoc src/index.ts",
+    "build:all": "vitest run && pnpm build && pnpm build:docs",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "captcha",
+    "svg",
+    "verification code"
+  ],
+  "author": {
+    "name": "lovezhangchuangxin",
+    "email": "2911331070@qq.com"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "pnpm@10.14.0",
+  "devDependencies": {
+    "@types/fontkit": "^2.0.8",
+    "tsup": "^8.5.0",
+    "typedoc": "^0.28.13",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "fontkit": "^2.0.4"
+  },
+  "files": [
+    "dist",
+    "assets",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ]
+}
