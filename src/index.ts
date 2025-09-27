@@ -47,7 +47,7 @@ export class Captcha {
 
   /**
    * 生成验证码，返回值包含验证码的值和 SVG 字符串
-   * @param text 自定义验证码文本，如果不传则随机生成
+   * @param content 自定义验证码文本，如果不传则随机生成
    * @return 验证码结果
    */
   async generate(content?: string): Promise<CaptchaResult> {

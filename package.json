@@ -17,6 +17,11 @@
       }
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lovezhangchuangxin/captcha"
+  },
+  "homepage": "https://github.com/lovezhangchuangxin/captcha",
   "scripts": {
     "dev": "tsup",
     "build": "tsup",
