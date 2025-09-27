@@ -1,4 +1,5 @@
 import fontkit from "fontkit";
+import { resolve } from "path";
 import { calculateFontColor, getRandomBackgroundColor } from "./color";
 import { getTextPath, loadFont } from "./font";
 import {
@@ -10,6 +11,11 @@ import {
   numberSet,
 } from "./random";
 import { CaptchaOptions, CaptchaResult } from "./types";
+
+const DEFAULT_FONT_PATH = resolve(
+  __dirname,
+  "../assets/Tagesschrift-Regular.ttf"
+);
 
 /**
  * 验证码生成器
@@ -27,7 +33,7 @@ export class Captcha {
 
   constructor(options: CaptchaOptions = {}) {
     this.options = {
-      fontPath: options.fontPath || "../assets/Tagesschrift-Regular.ttf",
+      fontPath: options.fontPath || DEFAULT_FONT_PATH,
       type: options.type || "number",
       backgroundColor: options.backgroundColor || getRandomBackgroundColor(),
       length: options.length || options.type === "formula" ? 2 : 4,
