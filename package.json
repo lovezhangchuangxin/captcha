@@ -1,5 +1,5 @@
 {
-  "name": "@kq/captcha",
+  "name": "@lovekeqing/captcha",
   "version": "0.0.1",
   "description": "A simple captcha generator",
   "main": "dist/index.js",
@@ -53,6 +53,9 @@
   },
   "dependencies": {
     "fontkit": "^2.0.4"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "dist",
