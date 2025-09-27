@@ -10,6 +10,6 @@ captcha.generate().then(({ value, svg }) => {
 });
 
 const captcha2 = new Captcha({ noise: 3 });
-captcha2.generate("@kq/captcha").then(({ value, svg }) => {
+captcha2.generate("@lovekeqing/captcha").then(({ value, svg }) => {
   fs.writeFileSync("./icon.svg", svg);
 });

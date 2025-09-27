@@ -1,6 +1,6 @@
-# @kq/captcha
+# @lovekeqing/captcha
 
-<img src="https://img.shields.io/npm/v/@kq/captcha.svg" alt="npm version" />
+<img src="https://img.shields.io/npm/v/@lovekeqing/captcha.svg" alt="npm version" />
 
 一个简单的 SVG 验证码生成器，支持数字、字母、混合和数学公式类型，可自定义字体、字符集、干扰线等参数。
 
@@ -21,13 +21,13 @@
 ## 安装
 
 ```sh
-pnpm add @kq/captcha
+pnpm add @lovekeqing/captcha
 ```
 
 ## 使用方法
 
 ```ts
-import { Captcha } from "@kq/captcha";
+import { Captcha } from "@lovekeqing/captcha";
 
 const captcha = new Captcha({
   type: "formula", // 验证码类型，可选："number" | "letter" | "mix" | "formula"
