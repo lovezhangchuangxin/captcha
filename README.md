@@ -65,7 +65,7 @@ captcha.generate(content?: string): Promise<CaptchaResult>
 
 `generate` 方法接受一个可选参数 `content`，用于指定验证码的内容。如果不传入该参数，验证码内容将根据配置项随机生成。
 
-返回一个包含以下属性的对象：
+返回一个 Promise 对象，其成功的结果包含以下属性：
 
 - `value`：验证码答案
 - `svg`：验证码的 SVG 字符串
