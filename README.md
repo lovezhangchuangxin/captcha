@@ -33,8 +33,6 @@ const captcha = new Captcha({
   type: "formula", // 验证码类型，可选："number" | "letter" | "mix" | "formula"
   length: 3, // 验证码长度或公式中数字个数
   noise: 2, // 干扰线数量
-  fontPath: "./assets/Tagesschrift-Regular.ttf", // 字体路径
-  backgroundColor: "#f2f4f8", // 背景色
 });
 
 captcha.generate().then(({ value, svg }) => {
@@ -82,6 +80,14 @@ captcha.generate(content?: string): Promise<CaptchaResult>
 - `pnpm test`：运行测试
 - `pnpm build:docs`：生成文档
 - `pnpm build:all`：测试、构建并生成文档
+
+## 贡献流程
+
+1. Fork 本仓库
+2. 创建新分支并进行修改
+3. 提交 Pull Request
+
+当项目的管理员审核通过后，您的贡献将被合并到主分支中。
 
 ## 许可证
 
