@@ -35,7 +35,7 @@ export class Captcha {
     this.options = {
       fontPath: options.fontPath || DEFAULT_FONT_PATH,
       type: options.type || "number",
-      backgroundColor: options.backgroundColor || getRandomBackgroundColor(),
+      backgroundColor: options.backgroundColor || "",
       length: options.length || options.type === "formula" ? 2 : 4,
       // 这里先占位，后面会根据字符长度计算实际宽度和高度
       width: options.width || 0,
@@ -62,6 +62,7 @@ export class Captcha {
     }
 
     const { backgroundColor, type } = this.options;
+    const bgColor = backgroundColor || getRandomBackgroundColor();
     const { text, value } = content
       ? {
           text: content,
@@ -75,7 +76,7 @@ export class Captcha {
       width: actualWidth,
       height: actualHeight,
       paths,
-    } = getTextPath(this.font!, text, backgroundColor);
+    } = getTextPath(this.font!, text, bgColor);
     if (this.options.width === 0) {
       this.options.width = actualWidth;
     }
@@ -90,7 +91,7 @@ export class Captcha {
     svg += `viewBox="0 0 ${this.options.width} ${this.options.height}">`;
 
     // 生成背景
-    svg += this.#generateBackground();
+    svg += this.#generateBackground(bgColor);
 
     // 添加文本 path
     svg += `<g transform="scale(${this.#scale.width},${this.#scale.height})">`;
@@ -99,11 +100,18 @@ export class Captcha {
 
     // 生成干扰线
     if (this.options.noise > 0) {
-      svg += this.#getNoiseLines();
+      svg += this.#getNoiseLines(bgColor);
     }
 
     svg += "</svg>";
-    return { value, svg };
+    return {
+      value,
+      svg,
+      backgroundColor: bgColor,
+      width: this.options.width,
+      height: this.options.height,
+      scale: { ...this.#scale },
+    };
   }
 
   /**
@@ -137,25 +145,19 @@ export class Captcha {
   /**
    * 生成背景
    */
-  #generateBackground(): string {
+  #generateBackground(bgColor: string): string {
     const { width, height } = this.options;
     const w = width * this.#scale.width;
     const h = height * this.#scale.height;
-    const { backgroundColor } = this.options;
-    return `<rect width="${w}" height="${h}" fill="${backgroundColor}" />`;
+    return `<rect width="${w}" height="${h}" fill="${bgColor}" />`;
   }
 
   /**
    * 生成干扰线
    * @return 干扰线 SVG 字符串
    */
-  #getNoiseLines(): string {
-    const {
-      width,
-      height,
-      noiseWidth,
-      backgroundColor: bgColor,
-    } = this.options;
+  #getNoiseLines(bgColor: string): string {
+    const { width, height, noiseWidth } = this.options;
     const w = width * this.#scale.width;
     const h = height * this.#scale.height;
 

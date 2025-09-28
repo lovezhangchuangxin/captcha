@@ -12,7 +12,9 @@ export function calculateFontColor(bgColor: string) {
   } else if (bgColor.startsWith("rgb")) {
     [r, g, b] = parseRgbString(bgColor);
   } else {
-    throw new Error("Unsupported color format. Use HEX or RGB.");
+    throw new Error(
+      `${bgColor} is the unsupported color format. Use HEX or RGB.`
+    );
   }
 
   // 计算亮度
@@ -154,7 +156,7 @@ export function hexToRgb(hex: string): [number, number, number] {
       .join("");
   }
   if (hex.length !== 6) {
-    throw new Error("Invalid HEX color.");
+    throw new Error(`${hex} is not a valid HEX color.`);
   }
   const r = parseInt(hex.slice(0, 2), 16);
   const g = parseInt(hex.slice(2, 4), 16);
@@ -172,7 +174,7 @@ export function parseRgbString(rgbStr: string): [number, number, number] {
     /rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)/
   );
   if (!match) {
-    throw new Error("Invalid RGB color string.");
+    throw new Error(`${rgbStr} is not a valid RGB color.`);
   }
   const r = Math.min(255, Math.max(0, parseInt(match[1], 10)));
   const g = Math.min(255, Math.max(0, parseInt(match[2], 10)));

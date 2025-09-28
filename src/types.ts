@@ -32,4 +32,12 @@ export interface CaptchaResult {
   value: string;
   /** 验证码的 SVG 字符串 */
   svg: string;
+  /** 背景颜色 */
+  backgroundColor: string;
+  /** 宽度 */
+  width: number;
+  /** 高度 */
+  height: number;
+  /** 缩放 */
+  scale: { width: number; height: number };
 }

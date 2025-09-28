@@ -57,7 +57,26 @@ captcha.generate().then(({ value, svg }) => {
 - `ignoreChars`：忽略的字符集
 - `backgroundColor`：背景颜色
 
-## 命令
+## generate 方法
+
+```ts
+captcha.generate(content?: string): Promise<CaptchaResult>
+```
+
+`generate` 方法用于生成随机的验证码图片，详见 [`CaptchaResult`](src/types.ts)：
+
+`generate` 方法接受一个可选参数 `content`，用于指定验证码的内容。如果不传入该参数，验证码内容将根据配置项随机生成。
+
+返回一个包含以下属性的对象：
+
+- `value`：验证码答案
+- `svg`：验证码的 SVG 字符串
+- `backgroundColor`：背景颜色
+- `width`：宽度，实际生成的验证码图片宽度
+- `height`：高度，实际生成的验证码图片高度
+- `scale`：缩放，当用户指定的宽高与计算宽高不符时，会按用户指定的宽高进行缩放
+
+## 开发命令
 
 - `pnpm build`：构建项目
 - `pnpm test`：运行测试
