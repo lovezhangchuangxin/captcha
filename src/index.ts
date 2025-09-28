@@ -38,7 +38,7 @@ export class Captcha {
       fontPath: options.fontPath || DEFAULT_FONT_PATH,
       type: options.type || "number",
       backgroundColor: options.backgroundColor || "",
-      length: options.length || options.type === "formula" ? 2 : 4,
+      length: options.length || (options.type === "formula" ? 2 : 4),
 
       // 这里先占位，后面会根据验证码内容计算实际值
       width: options.width || 0,
