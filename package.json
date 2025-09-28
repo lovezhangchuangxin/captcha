@@ -1,6 +1,6 @@
 {
   "name": "@lovekeqing/captcha",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A simple captcha generator",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
