@@ -30,6 +30,8 @@ export class Captcha {
   #status: Promise<void>;
   /** 宽高缩放 */
   #scale: { width: number; height: number } = { width: 1, height: 1 };
+  /** 验证码的真实宽高 */
+  #size: { width: number; height: number } = { width: 0, height: 0 };
 
   constructor(options: CaptchaOptions = {}) {
     this.options = {
@@ -37,11 +39,13 @@ export class Captcha {
       type: options.type || "number",
       backgroundColor: options.backgroundColor || "",
       length: options.length || options.type === "formula" ? 2 : 4,
-      // 这里先占位，后面会根据字符长度计算实际宽度和高度
+
+      // 这里先占位，后面会根据验证码内容计算实际值
       width: options.width || 0,
       height: options.height || 0,
+
       noise: options.noise || 1,
-      noiseWidth: options.noiseWidth || 5,
+      noiseWidth: options.noiseWidth || 0,
       chars: options.chars || this.#getDefaultChars(options),
       ignoreChars: options.ignoreChars || "",
     };
@@ -60,7 +64,6 @@ export class Captcha {
     if (!this.font) {
       await this.#status;
     }
-
     const { backgroundColor, type } = this.options;
     const bgColor = backgroundColor || getRandomBackgroundColor();
     const { text, value } = content
@@ -73,22 +76,17 @@ export class Captcha {
     let svg = "<svg xmlns='http://www.w3.org/2000/svg' ";
     // 计算文本的 path 以及实际宽高
     const {
-      width: actualWidth,
-      height: actualHeight,
+      width: textWidth,
+      height: textHeight,
       paths,
     } = getTextPath(this.font!, text, bgColor);
-    if (this.options.width === 0) {
-      this.options.width = actualWidth;
-    }
-    if (this.options.height === 0) {
-      this.options.height = actualHeight;
-    }
+    this.#calculateRealSizeAndScale(textWidth, textHeight);
 
-    // 计算缩放比例
-    this.#scale.width = this.options.width / actualWidth;
-    this.#scale.height = this.options.height / actualHeight;
-
-    svg += `viewBox="0 0 ${this.options.width} ${this.options.height}">`;
+    const { width, height } = this.#size;
+    if (this.options.width > 0 || this.options.height > 0) {
+      svg += `width="${width}" height="${height}" `;
+    }
+    svg += `viewBox="0 0 ${width} ${height}">`;
 
     // 生成背景
     svg += this.#generateBackground(bgColor);
@@ -108,8 +106,8 @@ export class Captcha {
       value,
       svg,
       backgroundColor: bgColor,
-      width: this.options.width,
-      height: this.options.height,
+      width,
+      height,
       scale: { ...this.#scale },
     };
   }
@@ -146,10 +144,8 @@ export class Captcha {
    * 生成背景
    */
   #generateBackground(bgColor: string): string {
-    const { width, height } = this.options;
-    const w = width * this.#scale.width;
-    const h = height * this.#scale.height;
-    return `<rect width="${w}" height="${h}" fill="${bgColor}" />`;
+    const { width, height } = this.#size;
+    return `<rect width="${width}" height="${height}" fill="${bgColor}" />`;
   }
 
   /**
@@ -157,9 +153,9 @@ export class Captcha {
    * @return 干扰线 SVG 字符串
    */
   #getNoiseLines(bgColor: string): string {
-    const { width, height, noiseWidth } = this.options;
-    const w = width * this.#scale.width;
-    const h = height * this.#scale.height;
+    const { noiseWidth } = this.options;
+    const { width: w, height: h } = this.#size;
+    const strokeWidth = noiseWidth || Math.max(1, Math.floor(h * 0.03));
 
     // 所有的干扰线
     const lines: string[] = [];
@@ -181,11 +177,48 @@ export class Captcha {
       // 贝塞尔曲线 path
       const d = `M${startX},${startY} C${cp1X},${cp1Y} ${cp2X},${cp2Y} ${endX},${endY}`;
       lines.push(
-        `<path d="${d}" stroke="${color}" stroke-width="${noiseWidth}" fill="none"/>`
+        `<path d="${d}" stroke="${color}" stroke-width="${strokeWidth}" fill="none"/>`
       );
     }
 
     return lines.join("\n");
+  }
+
+  /**
+   * 计算验证码的真实宽高和缩放比例
+   * @param textWidth 验证码文案的宽度
+   * @param textHeight 验证码文案的高度
+   */
+  #calculateRealSizeAndScale(textWidth: number, textHeight: number) {
+    // 用户可能同时设置了验证码图片的宽高，这时候严格按这个来
+    if (this.options.width > 0 && this.options.height > 0) {
+      this.#size.width = this.options.width;
+      this.#size.height = this.options.height;
+      this.#scale.width = this.options.width / textWidth;
+      this.#scale.height = this.options.height / textHeight;
+    } else if (this.options.width > 0) {
+      // 用户只设置了宽度，高度则按比例计算
+      this.#size.width = this.options.width;
+      this.#size.height = Math.round(
+        (textHeight * this.options.width) / textWidth
+      );
+      this.#scale.width = this.options.width / textWidth;
+      this.#scale.height = this.#scale.width;
+    } else if (this.options.height > 0) {
+      // 用户只设置了高度，宽度则按比例计算
+      this.#size.height = this.options.height;
+      this.#size.width = Math.round(
+        (textWidth * this.options.height) / textHeight
+      );
+      this.#scale.height = this.options.height / textHeight;
+      this.#scale.width = this.#scale.height;
+    } else {
+      // 用户都没设置，则使用文本的实际宽高
+      this.#size.width = textWidth;
+      this.#size.height = textHeight;
+      this.#scale.width = 1;
+      this.#scale.height = 1;
+    }
   }
 
   /**

@@ -20,9 +20,10 @@ export function getTextPath(font: fontkit.Font, text: string, bgColor: string) {
   }
 
   const run = font.layout(text);
+  const scale = 1;
   // 左右各留 20px 边距
   let width = 20;
-  const paths = run.glyphs.map((glyph) => {
+  const paths = run.glyphs.map((glyph, index) => {
     glyph.path.commands.forEach((cmd) => {
       cmd.args = perturbCommand(cmd.args);
     });
@@ -30,16 +31,19 @@ export function getTextPath(font: fontkit.Font, text: string, bgColor: string) {
     const pathStr = glyph.path.toSVG();
     const color = calculateFontColor(bgColor);
     const halfFontWidth = glyph.advanceWidth / 2;
+    const isInBorder = index === 0 || index === run.glyphs.length - 1;
     // 对平移、缩放和旋转参数做轻微扰动
-    const scaleX = 1 + (Math.random() - 0.5) * 0.04; // 0.98~1.02
-    const scaleY = -1 + (Math.random() - 0.5) * 0.04; // -1.02~-0.98
-    const dx = width + getRandomInt(-halfFontWidth / 3, halfFontWidth / 3);
+    const scaleX = scale + (Math.random() - 0.5) * scale * 0.04; // 0.98~1.02
+    const scaleY = -scale + (Math.random() - 0.5) * scale * 0.04; // -1.02~-0.98
+    const dx = width;
     const dy = -font!.ascent;
-    const rotate = getRandomInt(-20, 20);
+    // 在边界上的字符不旋转，以免部分内容超出边界
+    const rotate = isInBorder ? 0 : getRandomInt(-20, 20);
     const path = `<path d="${pathStr}" fill="${color}" transform="scale(${scaleX},${scaleY}) translate(${dx},${dy}) rotate(${rotate})"/>`;
-    width = dx + glyph.advanceWidth;
+    width +=
+      getRandomInt(-halfFontWidth / 3, halfFontWidth / 3) + glyph.advanceWidth;
     return path;
   });
   width += 20;
-  return { paths, width, height: font.ascent - font.descent };
+  return { paths, width, height: font.ascent - font.descent, scale };
 }

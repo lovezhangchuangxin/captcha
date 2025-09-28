@@ -14,7 +14,7 @@ export interface CaptchaOptions {
   height?: number;
   /** 干扰线数量，默认 1 */
   noise?: number;
-  /** 干扰线宽度 */
+  /** 干扰线宽度，默认为0.03的图片高度 */
   noiseWidth?: number;
   /** 字符集 */
   chars?: string;

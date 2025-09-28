@@ -45,15 +45,17 @@ captcha.generate().then(({ value, svg }) => {
 
 详见 [`CaptchaOptions`](src/types.ts)：
 
+下面所有的配置项均为可选：
+
 - `fontPath`：字体文件路径，支持 ttf
-- `type`：验证码类型，"number" | "letter" | "mix" | "formula"
+- `type`：验证码类型，"number" | "letter" | "mix" | "formula"，默认 "number"
 - `length`：验证码长度，默认 4，公式类型表示数字个数
 - `width`/`height`：验证码图片宽高，默认自动计算
 - `noise`：干扰线数量，默认 1
-- `noiseWidth`：干扰线宽度
-- `chars`：自定义字符集
+- `noiseWidth`：干扰线宽度，默认 0.03 的图片高度
+- `chars`：自定义字符集，默认根据 `type` 生成
 - `ignoreChars`：忽略的字符集
-- `backgroundColor`：背景颜色
+- `backgroundColor`：背景颜色，默认随机生成
 
 ## generate 方法
 
