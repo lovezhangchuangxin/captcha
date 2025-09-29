@@ -4,6 +4,7 @@ import {
   generateRandomString,
   generateRandomFormula,
   evaluateFormula,
+  generatePositiveFormula,
 } from "../random";
 
 describe("getRandomInt", () => {
@@ -38,5 +39,14 @@ describe("evaluateFormula", () => {
     expect(evaluateFormula("3+5*2-4")).toBe(9);
     expect(evaluateFormula("10-2*3+1")).toBe(5);
     expect(evaluateFormula("8/2+6*3")).toBe(22);
+  });
+});
+
+describe("generatePositiveFormula", () => {
+  it("should return a formula string with a positive result", () => {
+    for (let i = 0; i < 10; i++) {
+      const formula = generatePositiveFormula(3);
+      expect(evaluateFormula(formula)).toBeGreaterThanOrEqual(0);
+    }
   });
 });

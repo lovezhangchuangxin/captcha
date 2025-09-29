@@ -4,7 +4,7 @@ import { calculateFontColor, getRandomBackgroundColor } from "./color";
 import { getTextPath, loadFont } from "./font";
 import {
   evaluateFormula,
-  generateRandomFormula,
+  generatePositiveFormula,
   generateRandomString,
   getRandomInt,
   letterSet,
@@ -131,7 +131,7 @@ export class Captcha {
 
     if (type === "formula") {
       // 公式类型
-      text = generateRandomFormula(length);
+      text = generatePositiveFormula(length);
       value = evaluateFormula(text).toString();
     } else {
       text = generateRandomString(length, effectiveChars);

@@ -57,6 +57,17 @@ export function generateRandomFormula(length: number): string {
 }
 
 /**
+ * 生成指定数字个数的随机公式（答案为正数）
+ */
+export function generatePositiveFormula(length: number): string {
+  let formula = "-1";
+  while (evaluateFormula(formula) < 0) {
+    formula = generateRandomFormula(length);
+  }
+  return formula;
+}
+
+/**
  * 计算数学公式
  * @param formula 数学公式字符串
  * @returns 计算结果
