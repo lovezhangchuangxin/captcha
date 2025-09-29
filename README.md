@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/npm/v/@lovekeqing/captcha.svg" alt="npm version" />
 
-一个简单的 SVG 验证码生成器，支持数字、字母、混合和数学公式类型，可自定义字体、字符集、干扰线等参数。
+一个简单的 SVG 验证码生成器，支持数字、字母、混合和数学公式类型，可自定义字体、字符集、干扰线等参数。暂时不支持浏览器端。
 
 <div align="center">
   <img src="./example/icon.svg" alt="icon" width="200" />
